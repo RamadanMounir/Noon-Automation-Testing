@@ -1,7 +1,7 @@
 # Project name (Noon-Automation-Testing).
 1-Project type — what is it about? (e.g., Selenium + TestNG framework for web testing).
 
-2-Tech stack/tools used (e.g., Java, Maven, TestNG, Selenium Grid, Allure Reports, etc.).
+2-Tech stack/tools used (e.g., Java, Maven, TestNG, Selenium, Allure Reports, etc.).
 
 3-How to run the tests (e.g., using mvn clean test -Dsuite=regression.xml).
 
