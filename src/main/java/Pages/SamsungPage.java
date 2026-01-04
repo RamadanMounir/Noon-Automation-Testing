@@ -81,7 +81,7 @@ public class SamsungPage {
                   driver.findElement(nextPageBtn).click();
                   wait.until(ExpectedConditions.stalenessOf(allItems.get(0)));
               }
-        }while (nextPage.equals("false"));
+        } while (nextPage.equals("false"));
 
 
     }
