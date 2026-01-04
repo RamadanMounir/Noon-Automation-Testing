@@ -6,6 +6,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import java.time.Duration;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class SamsungPage {
     WebDriver driver;
@@ -21,13 +22,11 @@ public class SamsungPage {
     private final By minPriceField = By.xpath("//input[@name='min']");
     private final By maxPriceField = By.xpath("//input[@name='max']");
     private final By submitButton = By.xpath("//button[@type='submit']");
-    private final By searchHeader=By.xpath("//h1[normalize-space()='Samsung Electronics & Mobiles']");
     private final By allProduct = By.xpath("//div[@data-qa='plp-product-box']");
     private final By productName = By.xpath("//h2[@data-qa='plp-product-box-name']");
     private final By productPrice = By.xpath("//strong[contains(@class,'amount')]");
     private final By nextPageBtn = By.xpath("//a[@aria-label='Next page']");
-    private final By pages = By.xpath("//ul[@role='navigation']/child::li");
-   private final By priceFilterHeader = By.xpath("//span[normalize-space()='Price (EGP)']");
+
 
     public String getSamsungPageTitle() {
         wait.until(ExpectedConditions.visibilityOfElementLocated(samsungBreadcrumb));
@@ -51,66 +50,39 @@ public class SamsungPage {
 
     }
 
-    public int getPageNumber() {
-        List<WebElement> pagesNumber = driver.findElements(pages);
-        return pagesNumber.size();
-    }
-
-
     public void verifyThatReturnedProductsCorrectAndInPriceRange(String brand_Name,
-                                                                 double minPrice, double maxPrice) throws InterruptedException {
+                                                                 double minPrice, double maxPrice) {
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(searchHeader));
-        boolean hasNextPage = true;
-        WebElement nextBtn = driver.findElement(nextPageBtn);
-        String disabled = nextBtn.getAttribute("aria-disabled");
+        String nextPage;
+        List<String>itemsName;
+        List<String>itemsPrice;
 
-        while ("false".equals(disabled)) {
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
+        do {
+               nextPage = driver.findElement(nextPageBtn).getAttribute("aria-disabled");
+            List<WebElement> allItems = driver.findElements(allProduct);
+            itemsName =  allItems.stream().map(i->i.findElement(productName)
+                      .getText()).collect(Collectors.toList());
 
-            // Get products for the current page
-            List<WebElement> products = driver.findElements(allProduct);
-            int numberOfProducts = products.size();
-            System.out.println("Products found: " + numberOfProducts);
+            Assert.assertTrue(itemsName.stream().allMatch(i->i.toLowerCase().contains(brand_Name.toLowerCase()))
+                    ,"Not all items contain Samsung");
 
-            for (int product = 0; product < numberOfProducts; product++) {
-                String getProductName = driver.findElements(productName).get(product).getText();
-                String getProductPrice = driver.findElements(productPrice).get(product).getText()
-                        .replace(",", "").trim();
-                double finalPrice = Double.parseDouble(getProductPrice);
-                System.out.println(getProductName+":  "+finalPrice);
+            itemsPrice =  allItems.stream().map(i->i.findElement(productPrice)
+                    .getText().replace(",","").trim()).collect(Collectors.toList());
+            List<Integer> finalPrice = itemsPrice.stream().map(p -> Integer.parseInt(
+                    p.replaceAll("[^\\d.]", "")))
+                    .collect(Collectors.toList());
 
-                Assert.assertTrue(getProductName.contains(brand_Name), "Wrong product brand");
-                Assert.assertTrue((finalPrice >= minPrice && finalPrice <= maxPrice)
-                        , "this price out of the range" + getProductName + ": " + getProductPrice);
+            Assert.assertTrue(finalPrice.stream().allMatch(p->p>=minPrice&&p<=maxPrice)
+                    ,"price of products out of the range");
 
-            }
-            if ("true".equals(disabled)) {
-                hasNextPage = false;// Stop the loop if no next page
-                System.out.println("last page");
-            }
-            else {
-                try {
-                    wait.until(ExpectedConditions.visibilityOfElementLocated(searchHeader)).getText();
-                    String currentUrl = driver.getCurrentUrl();
-                    driver.findElement(nextPageBtn).click();
+              if(nextPage.equals("false")) {
+                  driver.findElement(nextPageBtn).click();
+                  wait.until(ExpectedConditions.stalenessOf(allItems.get(0)));
+              }
+        }while (nextPage.equals("false"));
 
-                    wait.until(ExpectedConditions.not(
-                            ExpectedConditions.urlToBe(currentUrl)
-                    ));
-
-                    wait.until(ExpectedConditions.visibilityOfElementLocated(allProduct)).isDisplayed();
-                }
-                catch (ElementClickInterceptedException e){
-                    System.out.println("##############################################################🙋‍♂️🙋‍♂️🙋‍♂️");
-                    System.out.println("you are on last page");
-                    break;
-                }
-                // Wait for the page to load and for products to appear again
-
-            }
-
-        }
 
     }
 

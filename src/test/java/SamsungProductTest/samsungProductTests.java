@@ -10,7 +10,7 @@ public class samsungProductTests extends testBase {
     // Get value by column name
     String csvColumnNameMinPrice = "minPrice";
     String csvColumnNameMaxPrice = "maxPrice";
-    String CsvColumnNamebrandName ="brandName";
+    String CsvColumnNameBrandName ="brandName";
 
     @Test
     public void testOpenSamsungPage() {
@@ -20,14 +20,14 @@ public class samsungProductTests extends testBase {
 
         Assert.assertTrue(samsungPage.getSamsungPageTitle()
                         .contains("Samsung Electronics")
-                ,"Error: You are not on samsung page");
+                ,"Error: You are not on Samsung page");
 
     }
     @Test(dependsOnMethods = "testOpenSamsungPage")
-    public void testFilterByBrandAndPriceWorkCorrectly() throws InterruptedException {
+    public void testFilterByBrandAndPriceWorkCorrectly() {
         int getCsvColumnNameMinPrice = Integer.parseInt(csv.getValue(0, csvColumnNameMinPrice));
         int getCsvColumnNameMaxPrice = Integer.parseInt(csv.getValue(0, csvColumnNameMaxPrice));
-        String getCsvColumnNamebrandName=csv.getValue(0,CsvColumnNamebrandName);
+        String getCsvColumnNamebrandName=csv.getValue(0,CsvColumnNameBrandName);
 
         samsungPage.filterPrice(getCsvColumnNameMinPrice,getCsvColumnNameMaxPrice);
 

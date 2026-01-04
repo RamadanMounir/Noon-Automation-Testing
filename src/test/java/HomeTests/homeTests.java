@@ -15,7 +15,7 @@ public class homeTests extends testBase {
         SamsungPage samsungPage=homePage.openSamsungPage();
         Assert.assertTrue(samsungPage.getSamsungPageTitle()
                         .contains("Samsung Electronics")
-                        ,"Error: You are not on samsung page");
+                        ,"Error: You are not on Samsung Page");
     }
 
 }
