@@ -34,7 +34,7 @@ public class HomePage {
                 .perform();
     }
     public SamsungPage openSamsungPage(){
-        actions.moveToElement(driver.findElement(SamsungSection))
+        actions.moveToElement( wait.until(ExpectedConditions.visibilityOfElementLocated(SamsungSection)))
                 .click()
                 .build()
                 .perform();

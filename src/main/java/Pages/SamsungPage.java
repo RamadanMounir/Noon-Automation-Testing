@@ -16,7 +16,7 @@ public class SamsungPage {
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
-    private final By samsungBreadcrumb = By.xpath("//span[@class='Breadcrumb_active__nQtO3']");
+    private final By samsungBreadcrumb = By.xpath("//span[contains(@class,'Breadcrumb') and contains(@class,'active')]");
     private final By priceFilterButton = By.xpath("//h3[normalize-space()='Price']");
     private final By minPriceField = By.xpath("//input[@name='min']");
     private final By maxPriceField = By.xpath("//input[@name='max']");
@@ -24,7 +24,7 @@ public class SamsungPage {
     private final By searchHeader=By.xpath("//h1[normalize-space()='Samsung Electronics & Mobiles']");
     private final By allProduct = By.xpath("//div[@data-qa='plp-product-box']");
     private final By productName = By.xpath("//h2[@data-qa='plp-product-box-name']");
-    private final By productPrice = By.xpath("//strong[contains(@class,'Price_amount')]");
+    private final By productPrice = By.xpath("//strong[contains(@class,'amount')]");
     private final By nextPageBtn = By.xpath("//a[@aria-label='Next page']");
     private final By pages = By.xpath("//ul[@role='navigation']/child::li");
    private final By priceFilterHeader = By.xpath("//span[normalize-space()='Price (EGP)']");
@@ -73,7 +73,7 @@ public class SamsungPage {
             int numberOfProducts = products.size();
             System.out.println("Products found: " + numberOfProducts);
 
-            for (int product = 1; product < numberOfProducts; product++) {
+            for (int product = 0; product < numberOfProducts; product++) {
                 String getProductName = driver.findElements(productName).get(product).getText();
                 String getProductPrice = driver.findElements(productPrice).get(product).getText()
                         .replace(",", "").trim();
@@ -98,13 +98,11 @@ public class SamsungPage {
                     wait.until(ExpectedConditions.not(
                             ExpectedConditions.urlToBe(currentUrl)
                     ));
-                   // Thread.sleep(1000);
-
 
                     wait.until(ExpectedConditions.visibilityOfElementLocated(allProduct)).isDisplayed();
                 }
                 catch (ElementClickInterceptedException e){
-                    System.out.println("##############################################################");
+                    System.out.println("##############################################################🙋‍♂️🙋‍♂️🙋‍♂️");
                     System.out.println("you are on last page");
                     break;
                 }
@@ -112,12 +110,13 @@ public class SamsungPage {
 
             }
 
-
-
         }
 
     }
+
 }
+
+
 
 
 

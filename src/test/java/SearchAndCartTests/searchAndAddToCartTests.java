@@ -23,8 +23,10 @@ public class searchAndAddToCartTests extends testBase {
         String productToSearch = testData.getString("validSearch");
         resultPage= homePage.searchAbout(productToSearch);
         resultPage.verifyCorrectSearchResultAppears(productToSearch);
-        sortedProductNameBeforeAddedToCart = new ArrayList<>(resultPage.getItemNameToVerify());
-          sortedProductPriceBeforeAddedToCart = new ArrayList<>(resultPage.getItemPriceToVerify());
+
+        sortedProductNameBeforeAddedToCart = resultPage.getItemNameToVerify();
+
+        sortedProductPriceBeforeAddedToCart =resultPage.getItemPriceToVerify();
     }
 
     @Test(dependsOnMethods = "testSearchTargetProductPageCorrectly",priority = 2)
@@ -38,16 +40,20 @@ public class searchAndAddToCartTests extends testBase {
     public void testCartPageOpenCorrectly(){
          cartPage = resultPage.openCart();
          cartPage.verifyCartPageOpenedCorrectly();
-         sortedProductNameAfterAddedToCart  = new ArrayList<>(cartPage.getItemNameToVerify());
-          sortedProductPriceAfterAddedToCart = new ArrayList<>(cartPage.getItemPriceToVerify());
+         sortedProductNameAfterAddedToCart  =cartPage.getItemNameToVerify();
+
+          sortedProductPriceAfterAddedToCart =cartPage.getItemPriceToVerify();
 
     }
     @Test(dependsOnMethods ={"testSearchTargetProductPageCorrectly","testCartPageOpenCorrectly"},priority = 4)
     public void testProductsAddedToCartAreCorrect(){
 
-        Assert.assertTrue(sortedProductNameAfterAddedToCart.containsAll(sortedProductNameBeforeAddedToCart));
-        Assert.assertTrue(sortedProductPriceAfterAddedToCart.containsAll(sortedProductPriceBeforeAddedToCart)
-                ,"There is product price has changed after added to cart");
+        Assert.assertTrue(sortedProductNameBeforeAddedToCart.containsAll(sortedProductNameAfterAddedToCart)
+                ,"item added to cart not correct");
+        Assert.assertTrue(sortedProductPriceBeforeAddedToCart.containsAll(sortedProductPriceAfterAddedToCart)
+                ,"item price on the cart not the same");
+
+
 
     }
     @Test(priority = 5)

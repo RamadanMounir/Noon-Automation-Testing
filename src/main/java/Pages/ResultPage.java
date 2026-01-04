@@ -10,6 +10,7 @@ import org.testng.Assert;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ResultPage {
     private WebDriver driver;
@@ -22,15 +23,15 @@ public class ResultPage {
     }
 
     private final By headerOfResult = By.xpath("//h1[normalize-space()='headphones']");
-    private final By emptySectionResult = By.xpath("//div[contains(@class,'EmptyState_container')]");
+    private final By emptySectionResult = By.xpath("//div[contains(@class,'EmptyState')]");
 
     private final By allProduct = By.xpath("//div[@data-qa='plp-product-box']");
     private final By productName = By.xpath("//h2[@data-qa='plp-product-box-name']");
-    private final By productPrice = By.xpath("//strong[contains(@class,'Price_amount')]");
+    private final By productPrice = By.xpath("//strong[contains(@class,'Price')]");
     private final By item= By.xpath("//button[contains(@class,'QuickAtc')]");
     private final By headerTitle = By.xpath("//h1[normalize-space()='headphones']");
     private final By numberOfProductOnCart =
-            By.xpath("//a[@data-qa='btn_cartLink-Header-Desktop']//span[@class='CartLinkBadge_counter__LiGCD']");
+            By.xpath("//a[contains(@data-qa,'btn_cartLink-Header-Desktop')]//span[@data-qa='btn_cart_count']");
     private final By cart = By.xpath("//a[@data-qa='btn_cartLink-Header-Desktop']");
 
     public void verifyCorrectSearchResultAppears(String Target){
@@ -72,43 +73,23 @@ public class ResultPage {
     public List<String> getItemNameToVerify() {
 
 
-        List<String> items = new ArrayList<>();
-
-        // get all products
         List<WebElement> products = driver.findElements(allProduct);
+        List<String>elementPrice = products.stream().limit(3).map
+                (p->p.findElement(productName).getText().trim()).collect(Collectors.toList());
+        List<String>itemsName = elementPrice.stream().sorted().collect(Collectors.toList());
 
-        // loop (here only first 3 products, you can change to products.size())
-        for (int productNum = 0; productNum < 3; productNum++) {
 
-            String getProductName = driver.findElements(productName)
-                    .get(productNum)
-                    .getText();
-            // store as {name}
-            items.add(new String(getProductName));
-        }
-
-        return items;
+        return itemsName;
     }
     public List<String> getItemPriceToVerify() {
 
-        List<String> items = new ArrayList<>();
-
         // get all products
         List<WebElement> products = driver.findElements(allProduct);
+        List<String>elementPrice = products.stream().limit(3).map
+                (p->p.findElement(productPrice).getText().trim()).collect(Collectors.toList());
+        List<String>itemsPrice = elementPrice.stream().sorted().collect(Collectors.toList());
 
-        // loop (here only first 3 products, you can change to products.size())
-        for (int productNum = 0; productNum < 3; productNum++) {
-
-
-            String getProductPrice = driver.findElements(productPrice)
-                    .get(productNum)
-                    .getText().trim();
-
-            // store as price
-            items.add(getProductPrice);
-        }
-
-        return items;
+        return itemsPrice ;
     }
 
     public boolean errorMessageAppears(){
