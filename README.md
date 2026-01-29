@@ -9,4 +9,4 @@
 
 5-Any output/report info (e.g., test reports generated in /target/surefire-reports or Allure report).
 
-6-Optional: Author name and contact info or GitHub link.
+6-GitHub link: https://github.com/RamadanMounir/Noon-Automation-Testing.git .
