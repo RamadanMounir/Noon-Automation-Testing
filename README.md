@@ -5,7 +5,7 @@
 
 3-How to run the tests (e.g., using mvn clean test -Dsuite=regression.xml).
 
-4-Setup steps (e.g., clone repo, install dependencies, set environment variables).
+4-Setup steps (e.g., clone repo, install dependencies).
 
 5-Output/report info (e.g., test reports generated in /target/surefire-reports or Allure report).
 
