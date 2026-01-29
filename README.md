@@ -5,8 +5,8 @@
 
 3-How to run the tests (e.g., using mvn clean test -Dsuite=regression.xml).
 
-4-Any setup steps (e.g., clone repo, install dependencies, set environment variables).
+4-Setup steps (e.g., clone repo, install dependencies, set environment variables).
 
-5-Any output/report info (e.g., test reports generated in /target/surefire-reports or Allure report).
+5-Output/report info (e.g., test reports generated in /target/surefire-reports or Allure report).
 
 6-GitHub link: https://github.com/RamadanMounir/Noon-Automation-Testing.git .
